@@ -1,29 +1,23 @@
 <template>
   <q-layout view="hHh Lpr lff">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
+    <q-header elevated class="text-black">
+      <q-toolbar class="q-py-sm q-px-md">
+        <q-btn flat dense round
           color="grey-10"
           icon="menu"
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-
         <q-toolbar-title>
           Web Name
         </q-toolbar-title>
         
-        <div class="YL__toolbar-input-container row no-wrap">
-          <q-input 
-            dense 
-            outlined 
-            square 
+        <div class="row no-wrap q-px-sm">
+          <q-input dense outlined square 
             v-model="text" 
             placeholder="Search" 
-            class="bg-white col">
+            class="bg-white col"
+            style="width:300px">
             
             <template v-slot:prepend>
               <q-icon name="search" />
@@ -32,20 +26,63 @@
         </div>
         
         <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn round dense flat color="grey-10" icon="notifications">
-            <q-badge color="red" text-color="white" floating>
-              2
-            </q-badge>
-            <q-tooltip>Notifications</q-tooltip>
-          </q-btn>
-          <q-btn round flat>
-            <q-avatar size="26px">
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-            </q-avatar>
-            <q-tooltip>Account</q-tooltip>
-          </q-btn>
+          <template v-if="isLoggedIn">
 
-          <q-btn color="pink-13" icon="add" label="Submit" />
+            <!-- Notification Button -->
+            <q-btn round dense flat color="grey-10" icon="notifications">
+              <q-badge color="red" text-color="white" floating>
+                2
+              </q-badge>
+              <q-tooltip>Notifications</q-tooltip>
+            </q-btn>
+
+            <!-- Profile Button with Menu -->
+            <q-btn round flat>
+              <q-avatar size="26px">
+                <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+              </q-avatar>
+
+              <q-menu auto-close>
+                <q-list dense>
+                  <q-item class="GL__menu-link-signed-in">
+                    <q-item-section>
+                      <div>Signed in as <strong>Mary</strong></div>
+                    </q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item clickable class="GL__menu-link">
+                    <q-item-section>Your profile</q-item-section>
+                  </q-item>
+                  <q-item clickable class="GL__menu-link">
+                    <q-item-section>Settings</q-item-section>
+                  </q-item>
+                  <q-item clickable class="GL__menu-link">
+                    <q-item-section>Sign out</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+
+            <!-- Submit Button -->
+            <q-btn color="pink-13" icon="add" label="Submit">
+              <q-menu auto-close>
+                <q-list dense style="min-width: 100px">
+                  <q-item clickable class="GL__menu-link">
+                    <q-item-section>Post</q-item-section>
+                  </q-item>
+                  <q-item clickable class="GL__menu-link">
+                    <q-item-section>Create Event</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </template>
+
+          <!-- Login and Sign Up Buttons if Not Logged In -->
+          <template v-else>
+            <q-btn outline color="pink-13" label="Login" to="/login"></q-btn>
+            <q-btn color="pink-13" label="Sign Up" to="register"></q-btn>
+          </template>
         </div>
       </q-toolbar>
     </q-header>
@@ -116,4 +153,5 @@ defineOptions({
     color: palevioletred !important;
   }
 </style>
+
 
