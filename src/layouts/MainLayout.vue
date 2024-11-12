@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh Lpr lff">
     <q-header elevated class="text-black">
-      <q-toolbar class="q-py-sm q-px-md">
+      <q-toolbar class="q-py-sm q-px-md" >
         <q-btn flat dense round
           color="grey-10"
           icon="menu"
@@ -46,7 +46,7 @@
                 <q-list dense>
                   <q-item class="GL__menu-link-signed-in">
                     <q-item-section>
-                      <div>Signed in as <strong>Mary</strong></div>
+                      <div>Signed in as <strong>{{ username }}</strong></div>
                     </q-item-section>
                   </q-item>
                   <q-separator />
@@ -56,7 +56,7 @@
                   <q-item clickable class="GL__menu-link">
                     <q-item-section>Settings</q-item-section>
                   </q-item>
-                  <q-item clickable class="GL__menu-link">
+                  <q-item clickable class="GL__menu-link" @click="logout">
                     <q-item-section>Sign out</q-item-section>
                   </q-item>
                 </q-list>
@@ -120,27 +120,34 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
 const drawer = ref(false)
-const miniState = ref(true)
-const text = ref('')  // Define 'text' to use it with v-model in <q-input>
+const text = ref('')
+const isLoggedIn = ref(false)
 
 const linksList1 = [
-  { title: 'Home', 
-    icon: 'home', 
-    link: '/' },
-  { title: 'Events', 
-    icon: 'palette', 
-    link: '/events' },
+  { title: 'Home', icon: 'home', link: '/' },
+  { title: 'Events', icon: 'palette', link: '/events' },
 ]
+
 const linksList2 = [
   { title: 'Competitions', icon: 'groups', link: 'https://github.com/quasarframework' },
 ]
 
+onMounted(() => {
+  isLoggedIn.value = localStorage.getItem('userToken') !== null;
+})
+
+const logout = () => {
+  localStorage.removeItem('userToken');
+  isLoggedIn.value = false;
+  console.log("User logged out successfully..");
+}
+
 function toggleLeftDrawer() {
-  drawer.value = !drawer.value
+  drawer.value = !drawer.value;
 }
 
 defineOptions({
@@ -149,9 +156,7 @@ defineOptions({
 </script>
 
 <style>
-  .q-drawer .q-router-link--exact-active{
-    color: palevioletred !important;
-  }
+.q-drawer .q-router-link--exact-active {
+  color: palevioletred !important;
+}
 </style>
-
-

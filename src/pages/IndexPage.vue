@@ -8,6 +8,6 @@
 
 <script setup>
 defineOptions({
-  name: 'EventPage'
+  name: 'IndexPage'
 });
 </script>

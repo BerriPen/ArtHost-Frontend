@@ -41,7 +41,7 @@
 import axios from "axios";
 
 export default {
-  name: "IndexPage",
+  name: "EventCard",
   data() {
     return {
       eventList: null,

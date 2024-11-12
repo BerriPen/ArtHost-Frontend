@@ -16,13 +16,6 @@
               </q-input>
 
               <q-input filled
-                v-model="email"
-                label="Email *"
-                lazy-rules
-                :rules="[val => val && val.length > 0 || 'Please type something']">
-              </q-input>
-
-              <q-input filled
                 v-model="password" 
                 label="Password *"
                 :type="isPwd ? 'password' : 'text'">
@@ -34,17 +27,16 @@
                   />
                 </template>
               </q-input>
-              
             </q-form>
           </q-card-section>
 
           <q-card-actions class="q-px-md">
-            <q-btn unelevated color="pink-13" size="lg" class="full-width" label="Login" />
+            <q-btn unelevated color="pink-13" size="lg" class="full-width" label="Login" @click="onSubmit"/>
           </q-card-actions>
 
-          <q-card-section class="text-center q-pa-none">
+          <q-card-section class="text-center q-pb-sm">
             <p class="text-grey-6">Not registered? 
-              <a href="/register" class="text-primary text-black">Create an Account</a>
+              <router-link to="/register" class="text-primary text-black">Create an Account</router-link>
             </p>
           </q-card-section>
           
@@ -53,29 +45,40 @@
     </div>
   </q-page>
 </template>
-  
+
 <script>
 import { ref } from 'vue'
-
+import axios from "axios";
+import { useRouter } from 'vue-router'; 
 
 export default {
   setup() {
     const username = ref('');
-    const email = ref('');
     const password = ref('');
     const isPwd = ref(true);
+    const router = useRouter();  
+
+    const loginUser = async () => {
+      try {
+        const url = "http://127.0.0.1:8000/api/main/login";
+        const response = await axios.post(url, {
+          username: username.value,
+          password: password.value
+        });
+        localStorage.setItem('userToken', response.data.token);
+        console.log("User logged in successfully", response.data);
+        router.push("/"); 
+      } catch (error) {
+        console.log("Error logging in:", error);
+      }
+    };
 
     const onSubmit = () => {
-      if (password.value === confirmPassword.value) {
-        console.log("Form submitted successfully!");
-      } else {
-        console.log("Passwords do not match.");
-      }
-    }
+      loginUser(); 
+    };
 
     return {
       username,
-      email,
       password,
       isPwd,
       onSubmit

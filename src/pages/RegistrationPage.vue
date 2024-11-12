@@ -40,19 +40,19 @@
                 label="Confirm Password *"
                 type="password"
                 lazy-rules
-                :rules="[val => val === password || 'Passwords do not match']">
+                :rules="[val => val === password || 'Passwords do not match']"
+                >
               </q-input>
-              
             </q-form>
           </q-card-section>
 
           <q-card-actions class="q-px-md">
-            <q-btn unelevated color="pink-13" size="lg" class="full-width" label="Sign Up" />
+            <q-btn unelevated color="pink-13" size="lg" class="full-width" label="Sign Up" @click="onSubmit" />
           </q-card-actions>
 
-          <q-card-section class="text-center q-pa-none">
+          <q-card-section class="text-center q-pb-sm">
             <p class="text-grey-6">Already registered? 
-              <a href="/login" class="text-primary text-black">Login here</a>
+              <router-link to="/login" class="text-primary text-black">Log In Here</router-link>
             </p>
           </q-card-section>
           
@@ -64,7 +64,7 @@
   
 <script>
 import { ref } from 'vue'
-
+import axios from "axios";
 
 export default {
   setup() {
@@ -74,13 +74,27 @@ export default {
     const confirmPassword = ref('');
     const isPwd = ref(true);
 
+    const registerUser = async () => {
+      try {
+        const url = "http://127.0.0.1:8000/api/main/signup";
+        const response = await axios.post(url, {
+          username: username.value,
+          email: email.value,
+          password: password.value
+        });
+        console.log("User registered successfully:", response.data);
+      } catch (error) {
+        console.log("Error registering user:", error);
+      }
+    };
+
     const onSubmit = () => {
       if (password.value === confirmPassword.value) {
-        console.log("Form submitted successfully!");
+        registerUser();
       } else {
         console.log("Passwords do not match.");
       }
-    }
+    };
 
     return {
       username,
@@ -89,7 +103,7 @@ export default {
       confirmPassword,
       isPwd,
       onSubmit
-    }
+    };
   }
 };
 </script>
