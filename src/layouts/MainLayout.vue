@@ -93,10 +93,14 @@
     <q-drawer
       v-model="drawer"
       show-if-above
+      persistent
       :width="200"
       :breakpoint="500"
+      :mini="miniState"
+      @mouseenter="miniState = false"
+      @mouseleave="miniState = true"
+      mini-to-overlay
       bordered
-      persistent
       :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-1'"
     >
       <q-list class="text-weight-bold">
@@ -117,7 +121,7 @@
     </q-drawer>
 
     <!-- Page Container -->
-    <q-page-container>
+    <q-page-container class="bg-grey-1">
       <router-view />
     </q-page-container>
 
@@ -135,7 +139,7 @@
             <q-form class="q-pt-sm q-gutter-md text-weight-bold">
               <div>
                 <p>Caption</p>
-                <q-input v-model="text" outlined type="textarea" />
+                <q-input v-model="caption" outlined type="textarea" />
               </div>
 
               <div>
@@ -187,10 +191,11 @@ import { ref, onMounted } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 
 const drawer = ref(false);
+const miniState = ref(true);
 const isDialogOpen = ref(false);
 
-const selectedFile = ref(null); // File input
-const filePreview = ref(null); // File preview URL
+const selectedFile = ref(null);
+const filePreview = ref(null);
 
 const text = ref("");
 const isLoggedIn = ref(false);
@@ -200,9 +205,9 @@ const previewFile = () => {
   if (selectedFile.value) {
     const reader = new FileReader();
     reader.onload = (e) => {
-      filePreview.value = e.target.result; // Update preview URL
+      filePreview.value = e.target.result;
     };
-    reader.readAsDataURL(selectedFile.value); // Read file as Data URL
+    reader.readAsDataURL(selectedFile.value);
   }
 };
 
@@ -250,3 +255,9 @@ defineOptions({
   name: "MainLayout",
 });
 </script>
+
+<style>
+.q-drawer .q-router-link--exact-active {
+  color: #ed2662 !important;
+}
+</style>

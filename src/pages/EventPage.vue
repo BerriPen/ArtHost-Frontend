@@ -1,8 +1,7 @@
 <template>
   <q-page>
     <div>
-        <EventCard/>
-        HOME PAGE
+      <EventCard />
     </div>
   </q-page>
 </template>
@@ -21,7 +20,7 @@ export default {
     this.fetchEvents();
   },
   components: {
-    EventCard
+    EventCard,
   },
   methods: {
     async fetchEvents() {
