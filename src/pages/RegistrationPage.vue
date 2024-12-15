@@ -86,6 +86,7 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
@@ -94,6 +95,7 @@ export default {
     const password = ref("");
     const confirmPassword = ref("");
     const isPwd = ref(true);
+    const router = useRouter();
 
     const registerUser = async () => {
       try {
@@ -104,6 +106,7 @@ export default {
           password: password.value,
         });
         console.log("User registered successfully:", response.data);
+        router.push("/");
       } catch (error) {
         console.log("Error registering user:", error);
       }

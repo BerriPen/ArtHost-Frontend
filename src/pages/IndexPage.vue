@@ -1,23 +1,26 @@
 <template>
   <q-page class="q-pa-lg">
-    <div>
-      <p>HOME PAGE</p>
+    <div class="bg-white">
+      <div>
+        <p class="text-h5">HOME PAGE</p>
+      </div>
     </div>
 
-    <div class="q-pa-sm q-ma-sm" v-if="postDisplay && postDisplay.length">
+    <div class="q-pa-md q-ma-sm" v-if="postDisplay && postDisplay.length">
       <q-card
-        v-for="post in postDisplay"
-        :key="post.id"
-        class="card-post"
+        v-for="(post, index) in postDisplay"
+        :key="index"
+        class="card-post q-mb-md"
         flat
         bordered
       >
         <q-item>
           <q-item-section avatar>
-            <q-avatar>
+            <q-avatar size="36px">
               <img
                 :src="
-                  post.avatar || 'https://cdn.quasar.dev/img/boy-avatar.png'
+                  `http://127.0.0.1:8000${post.avatar}` ||
+                  'https://cdn.quasar.dev/img/boy-avatar.png'
                 "
                 alt="Avatar"
               />
@@ -31,16 +34,18 @@
         </q-item>
 
         <q-separator />
-
         <q-img
-          :src="post.image || 'https://cdn.quasar.dev/img/parallax2.jpg'"
+          :src="
+            `http://127.0.0.1:8000${post.photo}` ||
+            'https://cdn.quasar.dev/img/parallax2.jpg'
+          "
           alt="Post image"
         />
 
         <q-card-section>
           <div>{{ post.caption || "No Caption" }}</div>
           <div class="text-caption text-grey">
-            {{ post.date || "Unknown Date" }}
+            {{ post.createdAt || "Unknown Date" }}
           </div>
         </q-card-section>
       </q-card>
@@ -59,6 +64,8 @@ const postDisplay = ref([]);
 
 const fetchPosts = async () => {
   console.log("Fetching post details");
+
+  console.log(postDisplay.value);
   const url = "http://127.0.0.1:8000/api/main/postDisplay";
 
   try {

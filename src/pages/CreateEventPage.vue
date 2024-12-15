@@ -13,15 +13,37 @@
             <q-form class="q-pt-sm q-gutter-md text-weight-bold">
               <div>
                 <p>Event Name*</p>
-                <q-input outlined />
+                <q-input
+                  v-model="eventName"
+                  outlined
+                  lazy-rules
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'Please type something',
+                  ]"
+                />
               </div>
               <div>
                 <p>Theme</p>
-                <q-input outlined />
+                <q-input
+                  v-model="eventTheme"
+                  outlined
+                  lazy-rules
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'Please type something',
+                  ]"
+                />
               </div>
               <div>
                 <p>Description</p>
-                <q-input v-model="text" outlined type="textarea" />
+                <q-input
+                  v-model="eventDesc"
+                  outlined
+                  type="textarea"
+                  lazy-rules
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'Please type something',
+                  ]"
+                />
               </div>
 
               <div>
@@ -44,25 +66,25 @@
 
               <div>
                 <p>Submission Rules</p>
-                <q-input v-model="text" outlined type="textarea" />
+                <q-input v-model="subRules" outlined type="textarea" />
               </div>
               <div>
                 <p>Voting Criteria</p>
-                <q-input v-model="text" outlined type="textarea" />
+                <q-input v-model="voteCriteria" outlined type="textarea" />
               </div>
               <div>
                 <p>Prizes</p>
-                <q-input v-model="text" outlined type="textarea" />
+                <q-input v-model="prizes" outlined type="textarea" />
               </div>
 
               <div class="row q-pt-sm">
                 <div class="col q-mr-sm">
                   <p>Event Type</p>
-                  <q-select outlined v-model="model" :options="options" />
+                  <q-select outlined v-model="eventType" :options="options" />
                 </div>
                 <div class="col q-ml-sm">
                   <p>Category</p>
-                  <q-select outlined v-model="model" :options="options" />
+                  <q-select outlined v-model="eventCat" :options="options" />
                 </div>
               </div>
 
@@ -71,7 +93,7 @@
               <div class="row q-pt-sm">
                 <div class="col q-mr-sm">
                   <p>Start</p>
-                  <q-input outlined v-model="date">
+                  <q-input outlined v-model="startDate">
                     <template v-slot:prepend>
                       <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy
@@ -100,11 +122,7 @@
                           transition-show="scale"
                           transition-hide="scale"
                         >
-                          <q-time
-                            v-model="date"
-                            mask="YYYY-MM-DD HH:mm"
-                            format24h
-                          >
+                          <q-time v-model="date">
                             <div class="row items-center justify-end">
                               <q-btn
                                 v-close-popup
@@ -119,9 +137,10 @@
                     </template>
                   </q-input>
                 </div>
+
                 <div class="col q-ml-sm">
                   <p>End</p>
-                  <q-input outlined v-model="date">
+                  <q-input outlined v-model="endDate">
                     <template v-slot:prepend>
                       <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy
@@ -150,11 +169,7 @@
                           transition-show="scale"
                           transition-hide="scale"
                         >
-                          <q-time
-                            v-model="date"
-                            mask="YYYY-MM-DD HH:mm"
-                            format24h
-                          >
+                          <q-time v-model="date">
                             <div class="row items-center justify-end">
                               <q-btn
                                 v-close-popup
@@ -206,6 +221,22 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+
+const eventName = ref("");
+const eventTheme = ref("");
+const eventDesc = ref("");
+const selectedJudges = ref("");
+const subRules = ref("");
+const voteCriteria = ref("");
+const prizes = ref("");
+const eventType = ref("");
+const eventCat = ref("");
+const startDate = ref("");
+const endDate = ref("");
+const files = ref([]);
+
+const createEvent = async () => {};
 
 defineOptions({
   name: "CreateEvent",

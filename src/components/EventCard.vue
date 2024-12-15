@@ -7,7 +7,7 @@
         :key="index"
       >
         <q-img
-          src="../assets/banners/1.jpg"
+          src="https://cdn.quasar.dev/img/parallax2.jpg"
           fit="cover"
           class="full-width full-height"
         ></q-img>
