@@ -208,6 +208,7 @@
                   elevated
                   color="pink-13"
                   class="q-ma-sm"
+                  @click="onSubmit"
                 />
                 <q-btn label="Reset" type="reset" flat class="q-ml-sm" />
               </div>
@@ -219,26 +220,69 @@
   </q-page-container>
 </template>
 
-<script setup>
+<script>
 import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
-const eventName = ref("");
-const eventTheme = ref("");
-const eventDesc = ref("");
-const selectedJudges = ref("");
-const subRules = ref("");
-const voteCriteria = ref("");
-const prizes = ref("");
-const eventType = ref("");
-const eventCat = ref("");
-const startDate = ref("");
-const endDate = ref("");
-const files = ref([]);
+export default {
+  setup() {
+    const router = useRouter();
+    const eventName = ref("");
+    const eventTheme = ref("");
+    const eventDesc = ref("");
+    const selectedJudges = ref("");
+    const subRules = ref("");
+    const voteCriteria = ref("");
+    const prizes = ref("");
+    const eventType = ref("");
+    const eventCat = ref("");
+    const startDate = ref("");
+    const endDate = ref("");
+    const files = ref([]);
 
-const createEvent = async () => {};
+    const createEvent = async () => {
+      try {
+        const url = "http://127.0.0.1:8000/api/main/createEvent";
+        const response = await axios.post(url, {
+          name: eventName.value,
+          theme: eventTheme.value,
+          description: eventDesc.value,
+          judges: selectedJudges.value,
+          submission_rules: subRules.value,
+          voting_criteria: voteCriteria.value,
+          prizes: prizes.value,
+          eventType: eventType.value,
+          eventCategory: eventCat.value,
+          startDate: startDate.value,
+          endDate: endDate.value,
+          event_banner: files.value,
+        });
+        console.log("Event created successfully", response.data);
+        router.push("/");
+      } catch (error) {
+        console.log("Error creating event", error);
+      }
+    };
 
-defineOptions({
-  name: "CreateEvent",
-});
+    const onSubmit = () => {
+      createEvent();
+    };
+
+    return {
+      eventName,
+      eventTheme,
+      eventDesc,
+      selectedJudges,
+      subRules,
+      voteCriteria,
+      prizes,
+      eventType,
+      eventCat,
+      startDate,
+      files,
+      onSubmit,
+    };
+  },
+};
 </script>

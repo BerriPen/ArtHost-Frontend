@@ -25,6 +25,7 @@
             placeholder="Search"
             class="bg-white col"
             style="width: 300px"
+            @input="search"
           >
             <template v-slot:prepend>
               <q-icon name="search" />
@@ -42,13 +43,19 @@
 
             <q-btn round flat>
               <q-avatar size="26px">
-                <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+                <img
+                  :src="
+                    `http://127.0.0.1:8000${userDetails.profile_img}` ||
+                    'https://cdn.quasar.dev/img/boy-avatar.png'
+                  "
+                  alt="Avatar"
+                />
               </q-avatar>
               <q-menu auto-close>
                 <q-list dense>
                   <q-item>
                     <q-item-section>
-                      Signed in as <strong>{{ username }}</strong>
+                      Signed in as <strong>{{ userDetails.username }}</strong>
                     </q-item-section>
                   </q-item>
                   <q-separator />
@@ -59,6 +66,7 @@
               </q-menu>
             </q-btn>
 
+            <!-- Create Post -->
             <q-btn color="pink-13" icon="add" label="Submit">
               <q-menu auto-close>
                 <q-list dense style="min-width: 100px">
@@ -69,6 +77,7 @@
             </q-btn>
           </template>
 
+          <!-- If not logged in -->
           <template v-else>
             <q-btn outline color="pink-13" label="Login" to="/login" />
             <q-btn color="pink-13" label="Sign Up" to="/register" />
@@ -101,7 +110,7 @@
     </q-drawer>
 
     <!-- Page Container -->
-    <q-page-container class="bg-grey-2">
+    <q-page-container class="bg-grey-2" fixed-center>
       <router-view />
     </q-page-container>
 
@@ -162,7 +171,7 @@ const filePreview = ref(null);
 const postCaption = ref("");
 const searchQuery = ref("");
 const isLoggedIn = ref(false);
-const username = ref("User");
+const userDetails = ref({});
 
 const toggleDrawer = () => (drawerOpen.value = !drawerOpen.value);
 const openPostDialog = () => (postDialogOpen.value = true);
@@ -206,15 +215,14 @@ const submitPost = async () => {
     closePostDialog();
     selectedFile.value = null;
     filePreview.value = null;
+    postCaption.value = "";
   } catch (error) {
     console.error("Error uploading post:", error);
   }
 };
 
 onMounted(async () => {
-  // isLoggedIn.value = !!localStorage.getItem("userToken");
-  let token = localStorage.getItem("userToken");
-  console.log("token: ", token);
+  const token = localStorage.getItem("userToken");
   if (token) {
     isLoggedIn.value = true;
     try {
@@ -226,14 +234,14 @@ onMounted(async () => {
           },
         }
       );
-      username.value = response.data.username;
+      userDetails.value = response.data;
     } catch (error) {
       console.error("Error fetching user details:", error);
-      // isLoggedIn.value = false;
     }
   }
 });
 
+// SEARCH
 const search = async () => {
   if (!searchQuery.value.trim()) {
     return;
@@ -243,6 +251,7 @@ const search = async () => {
     const response = await axios.get(`http://127.0.0.1:8000/api/main/search`, {
       params: { query: searchQuery.value },
     });
+    console.log("Search results:", response.data);
   } catch (error) {
     console.error("Error searching:", error);
   }
@@ -259,8 +268,7 @@ const links2 = [
 const logout = () => {
   localStorage.removeItem("userToken");
   isLoggedIn.value = false;
-  console.log("Logged out.");
-  // $router.push("/login");
+  userDetails.value = {};
   router.push("/login");
 };
 

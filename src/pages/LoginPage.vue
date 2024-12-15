@@ -73,6 +73,23 @@ export default {
     const isPwd = ref(true);
     const router = useRouter();
 
+    // const loginUser = async () => {
+    //   try {
+    //     const url = "http://127.0.0.1:8000/api/main/login";
+    //     const response = await axios.post(url, {
+    //       username: username.value,
+    //       password: password.value,
+    //     });
+    //     console.log("token: ", response.data.token);
+
+    //     localStorage.setItem("userToken", response.data.token);
+    //     console.log("User logged in successfully", response.data);
+    //     router.push("/");
+    //   } catch (error) {
+    //     console.log("Error logging in:", error);
+    //   }
+    // };
+
     const loginUser = async () => {
       try {
         const url = "http://127.0.0.1:8000/api/main/login";
@@ -80,9 +97,10 @@ export default {
           username: username.value,
           password: password.value,
         });
-        console.log("token: ", response.data.token);
 
-        localStorage.setItem("userToken", response.data.token);
+        console.log("token: ", response.data.access_token);
+
+        localStorage.setItem("userToken", response.data.access_token);
         console.log("User logged in successfully", response.data);
         router.push("/");
       } catch (error) {
